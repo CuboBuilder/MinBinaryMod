@@ -2,7 +2,7 @@ name: "minbinary"
 displayName: "MinBinary"
 description: "Now you can encode and decode minbinary text with this mod. Requires deltanedas/ui-lib"
 author: "[blue]amogus[gold]228"
-version: "1.1"
+version: "1.2"
 hidden: true
 main: "main.js"
 minGameVersion: "136"

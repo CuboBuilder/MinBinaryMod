@@ -1,6 +1,5 @@
 const ui = require("ui_lib/library");
 
-// Функции для шифрования и расшифрования текста
 function textToBinary(text) {
     return text.split('').map(char => {
         return char.charCodeAt(0).toString(2).padStart(8, '0');
@@ -35,30 +34,44 @@ function decodeText(customString) {
     return text;
 }
 
-// Добавление кнопки для шифрования текста
-ui.addMenuButton("Encode Text", "paste", () => {
-    Vars.ui.showTextInput("Enter text to encode:", "Text:", "", (inputText) => {
-        const encodedText = encodeText(inputText);
-        // Копируем результат в буфер обмена
-        Core.app.setClipboardText(encodedText);
-        Vars.ui.showInfo("Encoded text copied to clipboard!");
-    });
-});
+function createCustomDialog() {
+    const dialog = new BaseDialog("MinBinary");
 
-// Добавление кнопки для расшифрования текста
-ui.addMenuButton("Decode Text", "paste", () => {
-    // Предупреждение перед декодированием текста из буфера обмена
-    Vars.ui.showConfirm("Decode Text", "Text will be copied from your clipboard. Proceed?", () => {
-        // Получаем текст из буфера обмена
-        const clipboardText = Core.app.getClipboardText();
-        
-        if (clipboardText) {
-            // Выполняем декодирование текста
-            const decodedText = decodeText(clipboardText);
-            Vars.ui.showInfo("Decoded Text: " + decodedText);
-        } else {
-            // Сообщение, если буфер обмена пуст
-            Vars.ui.showInfo("Clipboard is empty, cannot decode.");
-        }
+    dialog.cont.add("[blue]MinBinary").pad(10).center();
+    dialog.cont.row();
+
+    dialog.cont.add("[green]Click buttons to encode or decode text.").pad(10).center();
+    dialog.cont.row();
+
+    dialog.cont.button("Encode Text", () => {
+        Vars.ui.showTextInput("Enter text to encode:", "Text:", "", (inputText) => {
+            const encodedText = encodeText(inputText);
+            Core.app.setClipboardText(encodedText);
+            Vars.ui.showInfo("Encoded text copied to clipboard!");
+        });
+    }).size(240, 50).pad(10);
+
+    dialog.cont.row();
+
+    dialog.cont.button("Decode Text", () => {
+        Vars.ui.showConfirm("Decode Text", "Text will be copied from your clipboard. Proceed?", () => {
+            const clipboardText = Core.app.getClipboardText();
+
+            if (clipboardText) {
+                const decodedText = decodeText(clipboardText);
+                Vars.ui.showInfo("Decoded Text: " + decodedText);
+            } else {
+                Vars.ui.showInfo("Clipboard is empty, cannot decode.");
+            }
+        });
+    }).size(240, 50).pad(10);
+
+    dialog.addCloseButton();
+    dialog.show();
+}
+
+ui.onLoad(() => {
+    Vars.ui.schematics.buttons.button("Text Encoder/Decoder", Icon.paste, () => {
+        createCustomDialog();
     });
 });
