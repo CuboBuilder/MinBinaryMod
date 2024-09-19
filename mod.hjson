@@ -1,0 +1,13 @@
+name: "minbinary"
+displayName: "MinBinary"
+description: "Now you can encode and decode minbinary text with this mod. Requires deltanedas/ui-lib"
+author: "[blue]amogus[gold]228"
+version: "1.1"
+hidden: true
+main: "main.js"
+minGameVersion: "136"
+repo: "CuboBuilder/MinBinaryMod"
+icon: "icon.png"
+dependencies: [
+  "ui_lib"
+]
